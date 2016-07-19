@@ -1,0 +1,10 @@
+ask1 rvwrid_0 assgnid_1 > assgnid_3 > assgnid_4 > assgnid_5 > assgnid_6
+ask1 rvwrid_1 assgnid_4 > assgnid_5 > assgnid_6 > assgnid_7 > assgnid_9
+ask1 rvwrid_2 assgnid_3 > assgnid_7 > assgnid_9
+ask1 rvwrid_3 assgnid_1 > assgnid_2 > assgnid_4 > assgnid_5 > assgnid_9
+ask1 rvwrid_4 assgnid_0 > assgnid_1 > assgnid_2 > assgnid_5 > assgnid_6 > assgnid_9
+ask1 rvwrid_5 assgnid_1 > assgnid_3 > assgnid_6 > assgnid_9
+ask1 rvwrid_6 assgnid_2 > assgnid_3 > assgnid_5 > assgnid_7 > assgnid_8
+ask1 rvwrid_7 assgnid_0 > assgnid_1 > assgnid_4 > assgnid_5 > assgnid_8
+ask1 rvwrid_8 assgnid_1 > assgnid_2 > assgnid_4 > assgnid_6 > assgnid_7
+ask1 rvwrid_9 assgnid_1 > assgnid_4 > assgnid_5 > assgnid_6 > assgnid_8

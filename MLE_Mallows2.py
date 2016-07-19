@@ -20,7 +20,7 @@ def MLE_Mallows(D, Sigma, G):
 		x = {}
 		for d in C:
 			x[d] = sum([computeX_d(C, Sigma, g, d) for g in G])
-		# print(x)
+		print(x)
 		d_star = min(x, key=x.get)
 		MLE_sigma[d_star] = i
 		C.remove(d_star)

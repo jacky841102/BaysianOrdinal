@@ -47,12 +47,12 @@ def Metropolis_Hastings(D, T, Sigma, G):
 		print(x[i])
 
 	sigma0 = MLE_Mallows(D, Sigma, G)
-	#print(sigma0)
+	print(sigma0)
 	sigma = [sigma0[i] for i in D]
 	keyList = []
 	for i in D:
 		keyList.append(i)
-	#print(sigma)
+	print(sigma)
 	burnin = 500
 	#samples = np.zeros((D, D))
 	samples = {i : [] for i in D}
@@ -89,9 +89,9 @@ def main():
 	lst = [i for i in range(num)]
 	tuples = [(i,j) for i in lst for j in lst[i+1::]]
 	assignment = {i:[] for i in range(num)}
-	while len(tuples) > 0:
+	while len(tuples) > 200:
 		i = random.randint(0,num-1)
-		if len(assignment[i]) > 15	: continue
+		if len(assignment[i]) > 5	: continue
 		assign = random.randint(0, num-1)
 		if i == assign or assign in assignment[i]: continue
 		assignment[i].append(assign)

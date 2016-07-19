@@ -1,0 +1,11 @@
+TASK ID: ask1
+assgnid_0 5.1014
+assgnid_1 4.0408
+assgnid_2 2.4875
+assgnid_3 1.5904
+assgnid_4 1.0770
+assgnid_5 -0.4888
+assgnid_6 -1.8189
+assgnid_7 -2.6761
+assgnid_8 -3.8857
+assgnid_9 -4.4893

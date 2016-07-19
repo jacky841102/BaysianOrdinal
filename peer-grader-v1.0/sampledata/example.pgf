@@ -1,0 +1,3 @@
+task1 rvwrid_1 assgnid_1 > assgnid_2 > assgnid_3
+task1 rvwrid_2 assgnid_1 > assgnid_2 > assgnid_3
+task1 rvwrid_3 assgnid_1 > assgnid_3 > assgnid_2
