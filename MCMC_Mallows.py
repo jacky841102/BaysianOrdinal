@@ -6,8 +6,9 @@ from MLE_Mallows import MLE_Mallows
 import random
 import csv
 import math
-from sklearn.cluster import KMeans
+from sklearn.cluster import KMeans, DBSCAN
 from sklearn.decomposition import PCA
+import scipy.cluster.hierarchy as hcluster
 
 SAMPLE_SIZE = 10
 
@@ -197,15 +198,16 @@ def randomAssignment(assignment):
 			if  assign in assignment[row]: continue
 			assignment[row].append(assign)
 
-n_cl = 5
+n_cl = 2
 plt.figure(2)
-kmenas = KMeans(n_clusters=n_cl)
+kmenas = KMeans(n_clusters=n_cl, tol = 1e-6)
+
 assignment = {i:[] for i in range(SAMPLE_SIZE)}
 pca = PCA(n_components=2)
 ranks = None
 hists = None
 H_dist = None
-for i in range(int(SAMPLE_SIZE/n_cl)):
+for i in range(SAMPLE_SIZE):
 	print("---------------- %d ----------------" % i)
 	samples = main(assignment)
 	plt.figure(1)
@@ -214,17 +216,42 @@ for i in range(int(SAMPLE_SIZE/n_cl)):
 	plt.figure(2)
 	for row in hists:
 		vectors.append(row[0])
-	y_pred = kmenas.fit_predict(vectors)
-	for j in range(SAMPLE_SIZE):
-		assignment[n_cl * i + y_pred[j]].append(j)
+	# print(vectors)
+	# y_pred = kmenas.fit_predict(vectors)
+	# for j in range(SAMPLE_SIZE):
+	# 	assignment[n_cl * i + y_pred[j]].append(j)
 		# if y_pred[j] == 0:
 			# assignment[2 * i].append(j)
 		# else:
 			# assignment[2 * i + 1].append(j)
-	plt.subplot(SAMPLE_SIZE/n_cl, 1, i + 1)
-	vectors = pca.fit_transform(vectors)
-	vectors = np.matrix(vectors)
-	plt.scatter(vectors[:,0], vectors[:,1], c=y_pred)
+
+	# clusters = np.array(hcluster.fclusterdata(vectors, 0.05, criterion="distance"))
+	# print(clusters)
+	print(H_dist)
+
+	eps = 2
+	for r in range(SAMPLE_SIZE):
+		for c in range(SAMPLE_SIZE):
+			if r == c: continue
+			if H_dist[r][c] < eps:
+				eps = H_dist[r][c]
+
+	dbscan = DBSCAN(eps=min(eps+0.2, 1.5), metric="precomputed", min_samples=2)
+	y_pred = np.array(dbscan.fit_predict(H_dist))
+	print(y_pred)
+
+	indexs = np.where(y_pred == 0)[0]
+	print(indexs)
+	# assignment[i] = indexs
+	for idx in range(min(len(indexs), 5)):
+		assignment[i].append(indexs[idx]);
+
+
+
+	# plt.subplot(SAMPLE_SIZE/n_cl, 1, i + 1)
+	# vectors = pca.fit_transform(vectors)
+	# vectors = np.matrix(vectors)
+	# plt.scatter(vectors[:,0], vectors[:,1], c=y_pred)
 	print(assignment)
 plt.show()
 
