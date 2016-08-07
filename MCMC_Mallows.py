@@ -8,9 +8,10 @@ import csv
 import math
 from sklearn.cluster import KMeans, DBSCAN
 from sklearn.decomposition import PCA
+
 import scipy.cluster.hierarchy as hcluster
 
-SAMPLE_SIZE = 10
+SAMPLE_SIZE = 30
 
 def preprocessing(G, Sigma, i, j):
 	tot = 0
@@ -47,6 +48,8 @@ def Metropolis_Hastings(D, T, Sigma, G):
 		for j in D:
 			# print(i, j)
 			x[i][j] = preprocessing(G, Sigma, i, j)
+
+
 	# for i in range(len(D)):
 	# 	print()
 	# 	print(x[i])
@@ -154,6 +157,14 @@ def kendallTauDist(vector):
 			if vector[i] > vector[j]: sum -= 1
 	return sum
 
+def normalizedKendall(vector):
+	sum = 0
+	for i in range(SAMPLE_SIZE):
+		for j in range(i+1, SAMPLE_SIZE):
+			if vector[i] > vector[j]: sum -= 1
+			else: sum += 1
+	return 2.0 * sum / (SAMPLE_SIZE) / (SAMPLE_SIZE-1)
+
 # assignment, Sigma, samples = main()
 #
 
@@ -203,12 +214,16 @@ plt.figure(2)
 kmenas = KMeans(n_clusters=n_cl, tol = 1e-6)
 
 assignment = {i:[] for i in range(SAMPLE_SIZE)}
+# for i in range(30):
+
+
 pca = PCA(n_components=2)
 ranks = None
 hists = None
 H_dist = None
-for i in range(SAMPLE_SIZE):
-	print("---------------- %d ----------------" % i)
+t = 0
+while t < SAMPLE_SIZE:
+	print("---------------- %d ----------------" % t)
 	samples = main(assignment)
 	plt.figure(1)
 	ranks, hists, H_dist = postProcessing(samples)
@@ -231,27 +246,41 @@ for i in range(SAMPLE_SIZE):
 
 	eps = 2
 	for r in range(SAMPLE_SIZE):
-		for c in range(SAMPLE_SIZE):
-			if r == c: continue
+		for c in range(r+1, SAMPLE_SIZE):
 			if H_dist[r][c] < eps:
 				eps = H_dist[r][c]
 
-	dbscan = DBSCAN(eps=min(eps+0.2, 1.5), metric="precomputed", min_samples=2)
+	dbscan = DBSCAN(eps=min(eps+0.1, 1.5), metric="precomputed", min_samples=2)
 	y_pred = np.array(dbscan.fit_predict(H_dist))
 	print(y_pred)
 
-	indexs = np.where(y_pred == 0)[0]
-	print(indexs)
-	# assignment[i] = indexs
-	for idx in range(min(len(indexs), 5)):
-		assignment[i].append(indexs[idx]);
+	for a in range(max(y_pred)+1):
+		indexs = np.where(y_pred == a)[0]
+		for idx in indexs:
+			if t >= SAMPLE_SIZE: break
+			assignment[t].append(idx)
+			if len(assignment[t]) >= 5: t += 1
+		# if len(assignment[t]) >= 5:
+		# 	t += 1
+
+	if t < SAMPLE_SIZE and len(assignment[t]) > 0: t += 1
 
 
+	# for a in range(max(y_pred)+1):
+	# 	indexs = np.where(y_pred == a)[0]
+	# 	for idx in indexs:
+	# 		assignment[t].append(idx)
+	# 		if len(assignment[t]) >= 5: break
+	# 	if len(assignment[t]) >= 5:
+	# 		t += 1
+	# if len(assignment[t]) > 0: t += 1
 
 	# plt.subplot(SAMPLE_SIZE/n_cl, 1, i + 1)
 	# vectors = pca.fit_transform(vectors)
 	# vectors = np.matrix(vectors)
 	# plt.scatter(vectors[:,0], vectors[:,1], c=y_pred)
+
+
 	print(assignment)
 plt.show()
 

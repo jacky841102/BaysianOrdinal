@@ -1,7 +1,7 @@
 def computeX_d(C, Sigma, g, d):
 	tot = 0
-	# for dPrime in range(len(Sigma)): 	# More accurate if comparing whole set than comparing unranked set C
-	for dPrime in C:
+	for dPrime in range(len(Sigma)):
+	# for dPrime in C:
 		try:
 			if Sigma[g][dPrime] < Sigma[g][d]:
 				tot += 1
